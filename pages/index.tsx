@@ -23,7 +23,8 @@ const Home: NextPage = () => {
       } as any,
       body: JSON.stringify({ question }),
     })
-    getQnas()
+    await getQnas()
+    alert("추가했습니다!")
   }
   useEffect(() => {
     getQnas()
@@ -46,7 +47,7 @@ const Home: NextPage = () => {
               onChange={({ currentTarget: { value } }) => setQuestion(value)}
               placeholder="질문할 내용을 입력하1세요"
               rows={4}
-              className="min-h-[12rem] w-[80%] md:w-[45%] rounded-lg border border-slate-300 py-1.5 px-3 text-lg outline-none"
+              className="min-h-[12rem] w-[80%] rounded-lg border border-slate-300 py-1.5 px-3 text-lg outline-none md:w-[45%]"
             ></textarea>
             <button
               className="mt-8 rounded-lg bg-violet-600 py-2 px-5 text-lg font-bold text-white"
