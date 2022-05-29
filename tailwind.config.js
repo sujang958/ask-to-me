@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        Pretendard: ["Pretendard Variable", "sans-serif"],
+        pretendard: ["Pretendard Variable", "sans-serif"],
       },
     },
   },
