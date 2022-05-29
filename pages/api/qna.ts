@@ -22,6 +22,8 @@ const Qna: NextApiHandler = async (req, res) => {
       _id: insertedId.toString(),
       question,
       answered: false,
+      answeredAt: null,
+      answer: "",
     })
   }
 }
