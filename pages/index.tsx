@@ -1,7 +1,7 @@
-import { NextPage } from "next";
+import { NextPage } from "next"
 
 const Home: NextPage = () => {
-  return (<p className="text-6xl font-pretendard">hi</p>)
+  return <p className="font-pretendard text-6xl">hi</p>
 }
 
 export default Home
