@@ -1,11 +1,29 @@
 import { NextPage } from "next"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Qna, Screens } from "../typings"
 
 const Home: NextPage = () => {
   const [currentScreen, setCurrentScreen] = useState<Screens>("ANSWERED")
+  const [isLoading, setLoading] = useState(false)
   const [qnas, setQnas] = useState<Qna[]>([])
+  useEffect(() => {
+    const getQnas = async () => {
+      setLoading(true)
+      const res = await fetch("/api/qna")
+      const json = await res.json()
+      setQnas(json)
+      setLoading(false)
+    }
+    getQnas()
+  }, [])
+
+  if (isLoading)
+    return (
+      <div className="flex w-full flex-col items-center justify-center">
+        <p className="text-2xl font-bold">로딩중이다 샌즈</p>
+      </div>
+    )
 
   return (
     <div className="flex min-h-screen w-full flex-col rounded-t-lg bg-slate-50">
@@ -39,21 +57,29 @@ const Home: NextPage = () => {
       </header>
       <main className="flex flex-col py-6 px-4">
         {currentScreen === "ANSWERED" &&
-          answeredQuestions.map((question, i) => (
-            <div className="flex flex-col py-6 px-4" key={i}>
-              <p className="text-3xl font-semibold">&gt; {question.question}</p>
-              <p className="py-2 px-1 text-xl font-medium">{`< ${question.answer}`}</p>
-              <p className="pt-2.5 text-sm text-slate-500">
-                {new Date().toISOString()}
-              </p>
-            </div>
-          ))}
+          qnas
+            .filter(({ answered }) => answered)
+            .map((question, i) => (
+              <div className="flex flex-col py-6 px-4" key={i}>
+                <p className="text-3xl font-semibold">
+                  &gt; {question.question}
+                </p>
+                <p className="py-2 px-1 text-xl font-medium">{`< ${question.answer}`}</p>
+                <p className="pt-2 text-sm text-slate-500">
+                  {question.answeredAt}
+                </p>
+              </div>
+            ))}
         {currentScreen === "UNANSWERED" &&
-          answeredQuestions.map((question, i) => (
-            <div className="flex flex-col py-6 px-4" key={i}>
-              <p className="text-3xl font-semibold">&gt; {question.question}</p>
-            </div>
-          ))}
+          qnas
+            .filter(({ answered }) => !answered)
+            .map((question, i) => (
+              <div className="flex flex-col py-6 px-4" key={i}>
+                <p className="text-3xl font-semibold">
+                  &gt; {question.question}
+                </p>
+              </div>
+            ))}
       </main>
     </div>
   )
